@@ -200,18 +200,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
 /* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! jquery */ "jquery");
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_2__);
 
+
+ // Import jQuery
 
 function save({
   attributes
 }) {
   const {
-    tabs,
-    activeTab
+    tabs
   } = attributes;
-  {
-    tabs && tabs.map(tab => console.log(tab.content));
-  }
+
+  // Function to handle tab click event
+  const handleTabClick = event => {
+    console.log('helloo');
+  };
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     ..._wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useBlockProps.save()
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -220,13 +225,16 @@ function save({
     className: "easy-tabs-nav"
   }, tabs.map(tab => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", {
     key: tab.id,
-    className: `easy-tabs-tab ${activeTab === tab.id ? 'active' : ''}`
+    className: `easy-tabs-tab ${tab.id === 1 ? 'active' : ''}`,
+    "data-tab-id": tab.id,
+    onClick: handleTabClick // Attach click event
   }, tab.label))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "easy-tabs-content"
   }, tabs.map(tab => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     key: tab.id,
-    className: `easy-tabs-pane ${activeTab === tab.id ? 'active' : ''}`
-  }, activeTab === tab.id && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.RichText.Content, {
+    className: `easy-tabs-pane ${tab.id === 1 ? 'active' : ''}`,
+    "data-tab-id": tab.id
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.RichText.Content, {
     value: tab.content
   }))))));
 }
@@ -267,6 +275,16 @@ module.exports = window["React"];
 
 /***/ }),
 
+/***/ "jquery":
+/*!*************************!*\
+  !*** external "jQuery" ***!
+  \*************************/
+/***/ ((module) => {
+
+module.exports = window["jQuery"];
+
+/***/ }),
+
 /***/ "@wordpress/block-editor":
 /*!*************************************!*\
   !*** external ["wp","blockEditor"] ***!
@@ -303,7 +321,7 @@ module.exports = window["wp"]["i18n"];
   \************************/
 /***/ ((module) => {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"create-block/easy-tabs","version":"0.1.0","title":"Easy Tabs","category":"widgets","icon":"smiley","description":"Example block scaffolded with Create Block tool.","example":{},"supports":{"html":false},"textdomain":"easy-tabs","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","viewScript":"file:./view.js","attributes":{"tabs":{"type":"array","default":[{"id":1,"label":"Tab 1","content":""},{"id":2,"label":"Tab 2","content":""},{"id":3,"label":"Tab 3","content":""}],"items":{"type":"object","properties":{"content":{"type":"string","default":""}}}},"activeTab":{"type":"number","default":1}}}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"create-block/easy-tabs","version":"0.1.0","title":"Easy Tabs","category":"widgets","icon":"smiley","description":"Example block scaffolded with Create Block tool.","example":{},"supports":{"html":false},"textdomain":"easy-tabs","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","viewScript":"file:./view.js","attributes":{"tabs":{"type":"array","default":[{"id":1,"label":"Tab 1","content":""},{"id":2,"label":"Tab 2","content":""},{"id":3,"label":"Tab 3","content":""}],"items":{"type":"object","properties":{"content":{"type":"string","default":""}}}},"activeTab":{"type":"number","default":3}}}');
 
 /***/ })
 

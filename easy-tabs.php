@@ -28,3 +28,8 @@ function easy_tabs_easy_tabs_block_init() {
 	register_block_type( __DIR__ . '/build' );
 }
 add_action( 'init', 'easy_tabs_easy_tabs_block_init' );
+
+function enqueue_easy_tabs_script() {
+	wp_enqueue_script( 'easy-tabs-script', plugin_dir_url( __FILE__ ) . './src/function/tab-button.js', array( 'jquery' ), '1.0', true );
+}
+add_action( 'wp_enqueue_scripts', 'enqueue_easy_tabs_script' );

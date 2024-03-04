@@ -1,8 +1,14 @@
 import { useBlockProps, RichText } from '@wordpress/block-editor';
+import $ from 'jquery'; // Import jQuery
 
 export default function save({ attributes }) {
-    const { tabs, activeTab } = attributes;
-  { tabs&& tabs.map(tab=>console.log(tab.content))}
+    const { tabs } = attributes;
+
+    // Function to handle tab click event
+    const handleTabClick = (event) => {
+		console.log('helloo')
+    };
+
     return (
         <div { ...useBlockProps.save() }>
             <div className="easy-tabs">
@@ -10,7 +16,9 @@ export default function save({ attributes }) {
                     {tabs.map(tab => (
                         <li
                             key={tab.id}
-                            className={`easy-tabs-tab ${activeTab === tab.id ? 'active' : ''}`}
+                            className={`easy-tabs-tab ${tab.id === 1 ? 'active' : ''}`}
+                            data-tab-id={tab.id}
+                            onClick={handleTabClick} // Attach click event
                         >
                             {tab.label}
                         </li>
@@ -20,9 +28,10 @@ export default function save({ attributes }) {
                     {tabs.map(tab => (
                         <div
                             key={tab.id}
-                            className={`easy-tabs-pane ${activeTab === tab.id ? 'active' : ''}`}
+                            className={`easy-tabs-pane ${tab.id === 1 ? 'active' : ''}`}
+                            data-tab-id={tab.id}
                         >
-                            {activeTab === tab.id && <RichText.Content value={tab.content} />}
+                            <RichText.Content value={tab.content} />
                         </div>
                     ))}
                 </div>

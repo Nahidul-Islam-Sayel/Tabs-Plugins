@@ -1,0 +1,42 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "create-block/easy-tabs",
+    "version": "0.1.0",
+    "title": "Easy Tabs",
+    "category": "widgets",
+    "icon": "smiley",
+    "description": "Example block scaffolded with Create Block tool.",
+    "example": {},
+    "supports": {
+        "html": false
+    },
+    "textdomain": "easy-tabs",
+    "editorScript": "file:./index.js",
+    "editorStyle": "file:./index.css",
+    "style": "file:./style-index.css",
+    "viewScript": "file:./view.js",
+    "attributes": {
+        "tabs": {
+            "type": "array",
+            "default": [
+                { "id": 1, "label": "Tab 1", "content": ""},
+                { "id": 2, "label": "Tab 2", "content": "" },
+                { "id": 3, "label": "Tab 3", "content": "" }
+            ],
+            "items": {
+                "type": "object",
+                "properties": {
+                    "content": {
+                        "type": "string",
+                        "default": ""
+                    }
+                }
+            }
+        },
+        "activeTab": {
+            "type": "number",
+            "default": 1
+        }
+    }
+}

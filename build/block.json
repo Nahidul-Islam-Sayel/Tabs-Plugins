@@ -39,9 +39,16 @@
       "items": {
         "type": "object",
         "properties": {
+          "id": {
+            "type": "number"
+          },
+          "label": {
+            "type": "string",
+            "default": "Tab"
+          },
           "content": {
             "type": "string",
-            "default": ""
+            "default": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo."
           }
         }
       }
@@ -49,6 +56,18 @@
     "activeTab": {
       "type": "number",
       "default": 3
+    },
+    "tabBackgroundColor": {
+      "type": "string",
+      "default": "#fff"
+    },
+    "tabTextColor": {
+      "type": "string",
+      "default": "#000000"
+    },
+    "tabTextSize": {
+      "type": "number",
+      "default": 16
     }
   }
 }

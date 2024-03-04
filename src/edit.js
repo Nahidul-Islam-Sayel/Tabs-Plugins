@@ -1,15 +1,18 @@
 import { useState } from 'react';
 import { __ } from '@wordpress/i18n';
-import { useBlockProps, RichText } from '@wordpress/block-editor';
+import { useBlockProps, RichText, InspectorControls } from '@wordpress/block-editor';
+import { PanelBody, ColorPalette, RangeControl } from '@wordpress/components';
 import './editor.scss';
 
 export default function Edit({ attributes, setAttributes }) {
-    const { tabs: initialTabs } = attributes;
+    const { tabs: initialTabs, tabBackgroundColor, tabTextColor, tabTextSize } = attributes;
     const [tabs, setTabs] = useState(initialTabs);
-    const [activeTab, setActiveTab] = useState(null); // Initially, no tab is active
+    const [activeTab, setActiveTab] = useState(null); 
+    const [selectedContent, setSelectedContent] = useState(null); // State to track if content is selected
 
     const handleTabClick = (tabId) => {
-        setActiveTab(tabId === activeTab ? null : tabId); // Toggle active tab
+        setActiveTab(tabId === activeTab ? null : tabId);
+        setSelectedContent(null); // Deselect content when a tab is selected
     };
 
     const handleTabNameChange = (tabId, newName) => {
@@ -26,7 +29,7 @@ export default function Edit({ attributes, setAttributes }) {
 
     const addTab = () => {
         const newTabId = tabs.length + 1;
-        const newTab = { id: newTabId, label: __('Tab', 'easy-tabs') + ' ' + newTabId, content: '', image: '' };
+        const newTab = { id: newTabId, label: __('Tab', 'easy-tabs') + ' ' + newTabId, content: __('Type your content here...', 'easy-tabs') }; // Default content added here
         const updatedTabs = [...tabs, newTab];
         setTabs(updatedTabs);
         setAttributes({ tabs: updatedTabs });
@@ -37,7 +40,7 @@ export default function Edit({ attributes, setAttributes }) {
         setTabs(updatedTabs);
         setAttributes({ tabs: updatedTabs });
         if (activeTab === tabId) {
-            setActiveTab(null); // Deselect the tab if it's removed
+            setActiveTab(null); 
         }
     };
 
@@ -74,8 +77,43 @@ export default function Edit({ attributes, setAttributes }) {
         return rows;
     };
 
+    const onBackgroundColorChange = (newColor) => {
+        setAttributes({ tabBackgroundColor: newColor });
+    };
+
+    const onTextColorChange = (newColor) => {
+        setAttributes({ tabTextColor: newColor });
+    };
+
+    const onTextSizeChange = (newSize) => {
+        setAttributes({ tabTextSize: newSize });
+    };
+
     return (
         <div {...useBlockProps()}>
+            {activeTab && ( // Render InspectorPanel only if a tab is active
+                <InspectorControls>
+                    <PanelBody title={__('Tab Options')}>
+                        <ColorPalette
+                            value={tabBackgroundColor}
+                            onChange={onBackgroundColorChange}
+                            label={__('Background Color')}
+                        />
+                        <ColorPalette
+                            value={tabTextColor}
+                            onChange={onTextColorChange}
+                            label={__('Text Color')}
+                        />
+                        <RangeControl
+                            value={tabTextSize}
+                            onChange={onTextSizeChange}
+                            label={__('Text Size')}
+                            min={10}
+                            max={30}
+                        />
+                    </PanelBody>
+                </InspectorControls>
+            )}
             <div className="easy-tabs">
                 {groupTabsIntoRows().map((row, index) => (
                     <ul key={index} className="easy-tabs-nav">
@@ -84,6 +122,11 @@ export default function Edit({ attributes, setAttributes }) {
                                 key={tab.id}
                                 className={`easy-tabs-tab ${activeTab === tab.id ? 'active' : ''}`}
                                 onClick={() => handleTabClick(tab.id)}
+                                style={{
+                                    backgroundColor: tabBackgroundColor,
+                                    color: tabTextColor,
+                                    fontSize: `${tabTextSize}px`
+                                }}
                             >
                                 <RichText
                                     tagName="span"
@@ -122,6 +165,8 @@ export default function Edit({ attributes, setAttributes }) {
                                 tagName="div"
                                 value={tab.content}
                                 onChange={(content) => handleContentChange(tab.id, content)}
+                                placeholder={__('Type your content here...', 'easy-tabs')} // Placeholder added here
+                                onFocus={() => setSelectedContent(tab.id)} // Set selected content
                             />
                         </div>
                     ))}

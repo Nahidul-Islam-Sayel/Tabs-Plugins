@@ -1,5 +1,5 @@
 .easy-tabs {
-    border-radius: 12px;
+    border-radius: 0;
     overflow: hidden;
     background: #f8f9fa; /* Light gray background */
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Subtle shadow */
@@ -9,18 +9,20 @@
         padding: 0;
         margin: 0;
         display: flex;
-        background: linear-gradient(to right, #007cba, #005f7b); /* Gradient background for tabs */
+        background: #fff; /* Gradient background for tabs */
         border-bottom: 2px solid #007cba; /* Border bottom for active tab */
         overflow-x: auto; /* Allow tabs to scroll horizontally */
         white-space: nowrap; /* Prevent tabs from wrapping */
 
         .easy-tabs-tab {
             cursor: pointer;
-            padding: 12px 24px;
+            padding: 12px 20px; /* Adjusted padding */
+            margin-right: 10px; /* Added margin between tabs */
             color: #fff; /* White text color */
             font-weight: bold; /* Bold text */
             transition: background-color 0.3s ease-in-out;
-            border-radius: 12px 12px 0 0;
+            border: 1px solid #000; /* Small black border */
+            border-radius: 0; /* Remove border radius */
 
             &:hover {
                 background-color: rgba(255, 255, 255, 0.1); /* Light overlay on hover */
@@ -34,7 +36,7 @@
         .add-tab {
             margin-left: auto;
             button {
-                padding: 12px 24px;
+                padding: 12px 20px; /* Adjusted padding */
                 background-color: #007cba;
                 color: #fff;
                 border: none;
@@ -50,7 +52,7 @@
     }
 
     .easy-tabs-content {
-        padding: 20px;
+        padding: 30px;
 
         .easy-tabs-pane {
             display: none;
@@ -68,12 +70,14 @@
 
         .wp-block .block-editor-rich-text__editable {
             flex-grow: 1;
-            min-height: 0; /* Allow content to shrink */
+            min-height: 100px; /* Increased height */
             overflow-y: auto; /* Enable vertical scrolling if needed */
             color: #000; /* Set text color to black */
             border: 1px solid #ccc; /* Add border */
             border-radius: 4px; /* Add border radius */
-            padding: 8px; /* Add padding */
+            padding: 10px; /* Adjusted padding */
+            font-size: 16px; /* Adjusted font size */
+            line-height: 1.5; /* Adjusted line height */
         }
 
         .wp-block .block-editor-rich-text__editable::placeholder {

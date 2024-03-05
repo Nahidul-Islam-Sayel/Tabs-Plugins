@@ -6,8 +6,7 @@
   "title": "Easy Tabs",
   "category": "widgets",
   "icon": "smiley",
-  "description": "Example block scaffolded with Create Block tool.",
-  "example": {},
+  "description": "A block to display content in tabs.",
   "supports": {
     "html": false
   },
@@ -39,9 +38,16 @@
       "items": {
         "type": "object",
         "properties": {
+          "id": {
+            "type": "number"
+          },
+          "label": {
+            "type": "string",
+            "default": "Tab"
+          },
           "content": {
             "type": "string",
-            "default": ""
+            "default": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo."
           }
         }
       }
@@ -49,6 +55,46 @@
     "activeTab": {
       "type": "number",
       "default": 3
+    },
+    "tabBackgroundColor": {
+      "type": "string",
+      "default": "#fff",
+      "description": "Background color of the tabs."
+    },
+    "tabTextColor": {
+      "type": "string",
+      "default": "#000",
+      "description": "Text color of the tabs."
+    },
+    "tabTextSize": {
+      "type": "number",
+      "default": 16,
+      "description": "Font size of the tab labels."
+    },
+    "contentBackgroundColor": {
+      "type": "string",
+      "default": "#fff",
+      "description": "Background color of the tab content area."
+    },
+    "contentTextColor": {
+      "type": "string",
+      "default": "#000",
+      "description": "Text color of the tab content."
+    },
+    "contentTextSize": {
+      "type": "number",
+      "default": 16,
+      "description": "Font size of the tab content."
+    },
+    "contentAlignment": {
+      "type": "string",
+      "default": "left",
+      "enum": [
+        "left",
+        "center",
+        "right"
+      ],
+      "description": "Alignment of the tab content."
     }
   }
 }

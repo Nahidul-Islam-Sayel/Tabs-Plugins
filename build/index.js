@@ -18,7 +18,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
 /* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./editor.scss */ "./src/editor.scss");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
+/* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./editor.scss */ "./src/editor.scss");
+
+
 
 
 
@@ -29,13 +34,21 @@ function Edit({
   setAttributes
 }) {
   const {
-    tabs: initialTabs
+    tabs: initialTabs,
+    tabBackgroundColor,
+    tabTextColor,
+    tabTextSize,
+    contentTextColor,
+    contentBackgroundColor,
+    contentTextSize,
+    contentAlignment
   } = attributes;
   const [tabs, setTabs] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(initialTabs);
-  const [activeTab, setActiveTab] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null); // Initially, no tab is active
-
+  const [activeTab, setActiveTab] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
+  const [selectedContent, setSelectedContent] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
   const handleTabClick = tabId => {
-    setActiveTab(tabId === activeTab ? null : tabId); // Toggle active tab
+    setActiveTab(tabId === activeTab ? null : tabId);
+    setSelectedContent(null);
   };
   const handleTabNameChange = (tabId, newName) => {
     const updatedTabs = tabs.map(tab => tab.id === tabId ? {
@@ -58,12 +71,11 @@ function Edit({
     });
   };
   const addTab = () => {
-    const newTabId = tabs.length + 1;
+    const newTabId = (0,uuid__WEBPACK_IMPORTED_MODULE_5__["default"])();
     const newTab = {
       id: newTabId,
-      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Tab', 'easy-tabs') + ' ' + newTabId,
-      content: '',
-      image: ''
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('New Tab', 'easy-tabs'),
+      content: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Type your content here...', 'easy-tabs')
     };
     const updatedTabs = [...tabs, newTab];
     setTabs(updatedTabs);
@@ -78,7 +90,7 @@ function Edit({
       tabs: updatedTabs
     });
     if (activeTab === tabId) {
-      setActiveTab(null); // Deselect the tab if it's removed
+      setActiveTab(null);
     }
   };
   const moveTabRight = tabId => {
@@ -115,9 +127,90 @@ function Edit({
     }
     return rows;
   };
+  const onBackgroundColorChange = newColor => {
+    setAttributes({
+      tabBackgroundColor: newColor
+    });
+  };
+  const onTextColorChange = newColor => {
+    setAttributes({
+      tabTextColor: newColor
+    });
+  };
+  const onTextSizeChange = newSize => {
+    setAttributes({
+      tabTextSize: newSize
+    });
+  };
+  const onContentBackgroundColorChange = newColor => {
+    setAttributes({
+      contentBackgroundColor: newColor
+    });
+  };
+  const onContentTextColorChange = newColor => {
+    setAttributes({
+      contentTextColor: newColor
+    });
+  };
+  const onContentTextSizeChange = newSize => {
+    setAttributes({
+      contentTextSize: newSize
+    });
+  };
+  const onContentAlignmentChange = newAlignment => {
+    setAttributes({
+      contentAlignment: newAlignment
+    });
+  };
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     ...(0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.useBlockProps)()
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, activeTab && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.InspectorControls, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.PanelBody, {
+    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Tab Options')
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.ColorPalette, {
+    value: tabBackgroundColor,
+    onChange: onBackgroundColorChange,
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Background Color')
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.ColorPalette, {
+    value: tabTextColor,
+    onChange: onTextColorChange,
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Text Color')
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.RangeControl, {
+    value: tabTextSize,
+    onChange: onTextSizeChange,
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Text Size'),
+    min: 10,
+    max: 30
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.PanelBody, {
+    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Content Options')
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.ColorPalette, {
+    value: contentBackgroundColor,
+    onChange: onContentBackgroundColorChange,
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Content Background Color')
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.ColorPalette, {
+    value: contentTextColor,
+    onChange: onContentTextColorChange,
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Content Text Color')
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.RangeControl, {
+    value: contentTextSize,
+    onChange: onContentTextSizeChange,
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Content Text Size'),
+    min: 10,
+    max: 30
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.SelectControl, {
+    value: contentAlignment,
+    onChange: onContentAlignmentChange,
+    options: [{
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Left'),
+      value: 'left'
+    }, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Center'),
+      value: 'center'
+    }, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Right'),
+      value: 'right'
+    }],
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Content Alignment')
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "easy-tabs"
   }, groupTabsIntoRows().map((row, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
     key: index,
@@ -125,7 +218,12 @@ function Edit({
   }, row.map((tab, tabIndex) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", {
     key: tab.id,
     className: `easy-tabs-tab ${activeTab === tab.id ? 'active' : ''}`,
-    onClick: () => handleTabClick(tab.id)
+    onClick: () => handleTabClick(tab.id),
+    style: {
+      backgroundColor: tabBackgroundColor,
+      color: tabTextColor,
+      fontSize: `${tabTextSize}px`
+    }
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.RichText, {
     tagName: "span",
     value: tab.label,
@@ -151,11 +249,19 @@ function Edit({
     className: "easy-tabs-content"
   }, tabs.map(tab => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     key: tab.id,
-    className: `easy-tabs-pane ${activeTab === tab.id ? 'active' : ''}`
+    className: `easy-tabs-pane ${activeTab === tab.id ? 'active' : ''}`,
+    style: {
+      backgroundColor: contentBackgroundColor,
+      color: contentTextColor,
+      fontSize: `${contentTextSize}px`,
+      textAlign: contentAlignment
+    }
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.RichText, {
     tagName: "div",
     value: tab.content,
-    onChange: content => handleContentChange(tab.id, content)
+    onChange: content => handleContentChange(tab.id, content),
+    placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Type your content here...', 'easy-tabs'),
+    onFocus: () => setSelectedContent(tab.id)
   }))))));
 }
 
@@ -200,20 +306,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
 /* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! jquery */ "jquery");
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_2__);
 
-
- // Import jQuery
 
 function save({
   attributes
 }) {
   const {
-    tabs
+    tabs,
+    tabBackgroundColor,
+    tabTextColor,
+    tabTextSize,
+    contentBackgroundColor,
+    contentTextColor,
+    contentTextSize,
+    contentAlignment
   } = attributes;
-
-  // Function to handle tab click event
   const handleTabClick = event => {
     console.log('helloo');
   };
@@ -225,15 +332,26 @@ function save({
     className: "easy-tabs-nav"
   }, tabs.map(tab => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", {
     key: tab.id,
-    className: `easy-tabs-tab ${tab.id === 1 ? 'active' : ''}`,
+    className: `easy-tabs-tab ${tab.id === attributes.activeTab ? 'active' : ''}`,
     "data-tab-id": tab.id,
-    onClick: handleTabClick // Attach click event
+    onClick: handleTabClick,
+    style: {
+      color: tabTextColor,
+      fontSize: `${tabTextSize}px`,
+      backgroundColor: tabBackgroundColor
+    }
   }, tab.label))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "easy-tabs-content"
   }, tabs.map(tab => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     key: tab.id,
-    className: `easy-tabs-pane ${tab.id === 1 ? 'active' : ''}`,
-    "data-tab-id": tab.id
+    className: `easy-tabs-pane ${tab.id === attributes.activeTab ? 'active' : ''}`,
+    "data-tab-id": tab.id,
+    style: {
+      backgroundColor: contentBackgroundColor,
+      color: contentTextColor,
+      fontSize: `${contentTextSize}px`,
+      textAlign: contentAlignment
+    }
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.RichText.Content, {
     value: tab.content
   }))))));
@@ -265,6 +383,182 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/uuid/dist/esm-browser/native.js":
+/*!******************************************************!*\
+  !*** ./node_modules/uuid/dist/esm-browser/native.js ***!
+  \******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+const randomUUID = typeof crypto !== 'undefined' && crypto.randomUUID && crypto.randomUUID.bind(crypto);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  randomUUID
+});
+
+/***/ }),
+
+/***/ "./node_modules/uuid/dist/esm-browser/regex.js":
+/*!*****************************************************!*\
+  !*** ./node_modules/uuid/dist/esm-browser/regex.js ***!
+  \*****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (/^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|00000000-0000-0000-0000-000000000000)$/i);
+
+/***/ }),
+
+/***/ "./node_modules/uuid/dist/esm-browser/rng.js":
+/*!***************************************************!*\
+  !*** ./node_modules/uuid/dist/esm-browser/rng.js ***!
+  \***************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ rng)
+/* harmony export */ });
+// Unique ID creation requires a high quality random # generator. In the browser we therefore
+// require the crypto API and do not support built-in fallback to lower quality random number
+// generators (like Math.random()).
+let getRandomValues;
+const rnds8 = new Uint8Array(16);
+function rng() {
+  // lazy load so that environments that need to polyfill have a chance to do so
+  if (!getRandomValues) {
+    // getRandomValues needs to be invoked in a context where "this" is a Crypto implementation.
+    getRandomValues = typeof crypto !== 'undefined' && crypto.getRandomValues && crypto.getRandomValues.bind(crypto);
+
+    if (!getRandomValues) {
+      throw new Error('crypto.getRandomValues() not supported. See https://github.com/uuidjs/uuid#getrandomvalues-not-supported');
+    }
+  }
+
+  return getRandomValues(rnds8);
+}
+
+/***/ }),
+
+/***/ "./node_modules/uuid/dist/esm-browser/stringify.js":
+/*!*********************************************************!*\
+  !*** ./node_modules/uuid/dist/esm-browser/stringify.js ***!
+  \*********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
+/* harmony export */   unsafeStringify: () => (/* binding */ unsafeStringify)
+/* harmony export */ });
+/* harmony import */ var _validate_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./validate.js */ "./node_modules/uuid/dist/esm-browser/validate.js");
+
+/**
+ * Convert array of 16 byte values to UUID string format of the form:
+ * XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
+ */
+
+const byteToHex = [];
+
+for (let i = 0; i < 256; ++i) {
+  byteToHex.push((i + 0x100).toString(16).slice(1));
+}
+
+function unsafeStringify(arr, offset = 0) {
+  // Note: Be careful editing this code!  It's been tuned for performance
+  // and works in ways you may not expect. See https://github.com/uuidjs/uuid/pull/434
+  return byteToHex[arr[offset + 0]] + byteToHex[arr[offset + 1]] + byteToHex[arr[offset + 2]] + byteToHex[arr[offset + 3]] + '-' + byteToHex[arr[offset + 4]] + byteToHex[arr[offset + 5]] + '-' + byteToHex[arr[offset + 6]] + byteToHex[arr[offset + 7]] + '-' + byteToHex[arr[offset + 8]] + byteToHex[arr[offset + 9]] + '-' + byteToHex[arr[offset + 10]] + byteToHex[arr[offset + 11]] + byteToHex[arr[offset + 12]] + byteToHex[arr[offset + 13]] + byteToHex[arr[offset + 14]] + byteToHex[arr[offset + 15]];
+}
+
+function stringify(arr, offset = 0) {
+  const uuid = unsafeStringify(arr, offset); // Consistency check for valid UUID.  If this throws, it's likely due to one
+  // of the following:
+  // - One or more input array values don't map to a hex octet (leading to
+  // "undefined" in the uuid)
+  // - Invalid input values for the RFC `version` or `variant` fields
+
+  if (!(0,_validate_js__WEBPACK_IMPORTED_MODULE_0__["default"])(uuid)) {
+    throw TypeError('Stringified UUID is invalid');
+  }
+
+  return uuid;
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (stringify);
+
+/***/ }),
+
+/***/ "./node_modules/uuid/dist/esm-browser/v4.js":
+/*!**************************************************!*\
+  !*** ./node_modules/uuid/dist/esm-browser/v4.js ***!
+  \**************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _native_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./native.js */ "./node_modules/uuid/dist/esm-browser/native.js");
+/* harmony import */ var _rng_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./rng.js */ "./node_modules/uuid/dist/esm-browser/rng.js");
+/* harmony import */ var _stringify_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./stringify.js */ "./node_modules/uuid/dist/esm-browser/stringify.js");
+
+
+
+
+function v4(options, buf, offset) {
+  if (_native_js__WEBPACK_IMPORTED_MODULE_0__["default"].randomUUID && !buf && !options) {
+    return _native_js__WEBPACK_IMPORTED_MODULE_0__["default"].randomUUID();
+  }
+
+  options = options || {};
+  const rnds = options.random || (options.rng || _rng_js__WEBPACK_IMPORTED_MODULE_1__["default"])(); // Per 4.4, set bits for version and `clock_seq_hi_and_reserved`
+
+  rnds[6] = rnds[6] & 0x0f | 0x40;
+  rnds[8] = rnds[8] & 0x3f | 0x80; // Copy bytes to buffer, if provided
+
+  if (buf) {
+    offset = offset || 0;
+
+    for (let i = 0; i < 16; ++i) {
+      buf[offset + i] = rnds[i];
+    }
+
+    return buf;
+  }
+
+  return (0,_stringify_js__WEBPACK_IMPORTED_MODULE_2__.unsafeStringify)(rnds);
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (v4);
+
+/***/ }),
+
+/***/ "./node_modules/uuid/dist/esm-browser/validate.js":
+/*!********************************************************!*\
+  !*** ./node_modules/uuid/dist/esm-browser/validate.js ***!
+  \********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _regex_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./regex.js */ "./node_modules/uuid/dist/esm-browser/regex.js");
+
+
+function validate(uuid) {
+  return typeof uuid === 'string' && _regex_js__WEBPACK_IMPORTED_MODULE_0__["default"].test(uuid);
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (validate);
+
+/***/ }),
+
 /***/ "react":
 /*!************************!*\
   !*** external "React" ***!
@@ -272,16 +566,6 @@ __webpack_require__.r(__webpack_exports__);
 /***/ ((module) => {
 
 module.exports = window["React"];
-
-/***/ }),
-
-/***/ "jquery":
-/*!*************************!*\
-  !*** external "jQuery" ***!
-  \*************************/
-/***/ ((module) => {
-
-module.exports = window["jQuery"];
 
 /***/ }),
 
@@ -305,6 +589,16 @@ module.exports = window["wp"]["blocks"];
 
 /***/ }),
 
+/***/ "@wordpress/components":
+/*!************************************!*\
+  !*** external ["wp","components"] ***!
+  \************************************/
+/***/ ((module) => {
+
+module.exports = window["wp"]["components"];
+
+/***/ }),
+
 /***/ "@wordpress/i18n":
 /*!******************************!*\
   !*** external ["wp","i18n"] ***!
@@ -321,7 +615,7 @@ module.exports = window["wp"]["i18n"];
   \************************/
 /***/ ((module) => {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"create-block/easy-tabs","version":"0.1.0","title":"Easy Tabs","category":"widgets","icon":"smiley","description":"Example block scaffolded with Create Block tool.","example":{},"supports":{"html":false},"textdomain":"easy-tabs","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","viewScript":"file:./view.js","attributes":{"tabs":{"type":"array","default":[{"id":1,"label":"Tab 1","content":""},{"id":2,"label":"Tab 2","content":""},{"id":3,"label":"Tab 3","content":""}],"items":{"type":"object","properties":{"content":{"type":"string","default":""}}}},"activeTab":{"type":"number","default":3}}}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"create-block/easy-tabs","version":"0.1.0","title":"Easy Tabs","category":"widgets","icon":"smiley","description":"A block to display content in tabs.","supports":{"html":false},"textdomain":"easy-tabs","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","viewScript":"file:./view.js","attributes":{"tabs":{"type":"array","default":[{"id":1,"label":"Tab 1","content":""},{"id":2,"label":"Tab 2","content":""},{"id":3,"label":"Tab 3","content":""}],"items":{"type":"object","properties":{"id":{"type":"number"},"label":{"type":"string","default":"Tab"},"content":{"type":"string","default":"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo."}}}},"activeTab":{"type":"number","default":3},"tabBackgroundColor":{"type":"string","default":"#fff","description":"Background color of the tabs."},"tabTextColor":{"type":"string","default":"#000","description":"Text color of the tabs."},"tabTextSize":{"type":"number","default":16,"description":"Font size of the tab labels."},"contentBackgroundColor":{"type":"string","default":"#fff","description":"Background color of the tab content area."},"contentTextColor":{"type":"string","default":"#000","description":"Text color of the tab content."},"contentTextSize":{"type":"number","default":16,"description":"Font size of the tab content."},"contentAlignment":{"type":"string","default":"left","enum":["left","center","right"],"description":"Alignment of the tab content."}}}');
 
 /***/ })
 

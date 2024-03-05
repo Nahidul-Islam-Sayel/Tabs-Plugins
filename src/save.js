@@ -1,25 +1,21 @@
 import { useBlockProps, RichText } from '@wordpress/block-editor';
-import $ from 'jquery'; // Import jQuery
-
 export default function save({ attributes }) {
-    const { tabs, tabBackgroundColor, tabTextColor, tabTextSize } = attributes;
-
-    // Function to handle tab click event
+    const { tabs, tabBackgroundColor, tabTextColor, tabTextSize, contentBackgroundColor, contentTextColor, contentTextSize, contentAlignment } = attributes;
     const handleTabClick = (event) => {
 		console.log('helloo')
     };
 
     return (
         <div { ...useBlockProps.save() }>
-            <div className="easy-tabs" >
-                <ul className="easy-tabs-nav"  >
+            <div className="easy-tabs">
+                <ul className="easy-tabs-nav">
                     {tabs.map(tab => (
                         <li
                             key={tab.id}
-                            className={`easy-tabs-tab ${tab.id === 1 ? 'active' : ''}`}
+                            className={`easy-tabs-tab ${tab.id === attributes.activeTab ? 'active' : ''}`}
                             data-tab-id={tab.id}
-                            onClick={handleTabClick} // Attach click event
-                            style={{ color: tabTextColor, fontSize: `${tabTextSize}px` , backgroundColor: tabBackgroundColor }}
+                            onClick={handleTabClick} 
+                            style={{ color: tabTextColor, fontSize: `${tabTextSize}px`, backgroundColor: tabBackgroundColor }}
                         >
                             {tab.label}
                         </li>
@@ -29,9 +25,9 @@ export default function save({ attributes }) {
                     {tabs.map(tab => (
                         <div
                             key={tab.id}
-                            className={`easy-tabs-pane ${tab.id === 1 ? 'active' : ''}`}
+                            className={`easy-tabs-pane ${tab.id === attributes.activeTab ? 'active' : ''}`}
                             data-tab-id={tab.id}
-                            style={{ color: tabTextColor, fontSize: `${tabTextSize}px` }}
+                            style={{ backgroundColor: contentBackgroundColor, color: contentTextColor, fontSize: `${contentTextSize}px`, textAlign: contentAlignment }}
                         >
                             <RichText.Content value={tab.content} />
                         </div>

@@ -1,18 +1,19 @@
 import { useState } from 'react';
 import { __ } from '@wordpress/i18n';
 import { useBlockProps, RichText, InspectorControls } from '@wordpress/block-editor';
-import { PanelBody, ColorPalette, RangeControl } from '@wordpress/components';
+import { PanelBody, ColorPalette, RangeControl, SelectControl } from '@wordpress/components';
+import { v4 as uuidv4 } from 'uuid'; 
 import './editor.scss';
 
 export default function Edit({ attributes, setAttributes }) {
-    const { tabs: initialTabs, tabBackgroundColor, tabTextColor, tabTextSize } = attributes;
+    const { tabs: initialTabs, tabBackgroundColor, tabTextColor, tabTextSize, contentTextColor, contentBackgroundColor, contentTextSize, contentAlignment } = attributes;
     const [tabs, setTabs] = useState(initialTabs);
     const [activeTab, setActiveTab] = useState(null); 
-    const [selectedContent, setSelectedContent] = useState(null); // State to track if content is selected
+    const [selectedContent, setSelectedContent] = useState(null); 
 
     const handleTabClick = (tabId) => {
         setActiveTab(tabId === activeTab ? null : tabId);
-        setSelectedContent(null); // Deselect content when a tab is selected
+        setSelectedContent(null); 
     };
 
     const handleTabNameChange = (tabId, newName) => {
@@ -28,8 +29,8 @@ export default function Edit({ attributes, setAttributes }) {
     };
 
     const addTab = () => {
-        const newTabId = tabs.length + 1;
-        const newTab = { id: newTabId, label: __('Tab', 'easy-tabs') + ' ' + newTabId, content: __('Type your content here...', 'easy-tabs') }; // Default content added here
+        const newTabId = uuidv4(); 
+        const newTab = { id: newTabId, label: __('New Tab', 'easy-tabs'), content: __('Type your content here...', 'easy-tabs') }; 
         const updatedTabs = [...tabs, newTab];
         setTabs(updatedTabs);
         setAttributes({ tabs: updatedTabs });
@@ -89,9 +90,25 @@ export default function Edit({ attributes, setAttributes }) {
         setAttributes({ tabTextSize: newSize });
     };
 
+    const onContentBackgroundColorChange = (newColor) => {
+        setAttributes({ contentBackgroundColor: newColor });
+    };
+
+    const onContentTextColorChange = (newColor) => {
+        setAttributes({ contentTextColor: newColor });
+    };
+
+    const onContentTextSizeChange = (newSize) => {
+        setAttributes({ contentTextSize: newSize });
+    };
+
+    const onContentAlignmentChange = (newAlignment) => {
+        setAttributes({ contentAlignment: newAlignment });
+    };
+
     return (
         <div {...useBlockProps()}>
-            {activeTab && ( // Render InspectorPanel only if a tab is active
+            {activeTab && ( 
                 <InspectorControls>
                     <PanelBody title={__('Tab Options')}>
                         <ColorPalette
@@ -110,6 +127,35 @@ export default function Edit({ attributes, setAttributes }) {
                             label={__('Text Size')}
                             min={10}
                             max={30}
+                        />
+                    </PanelBody>
+                    <PanelBody title={__('Content Options')}>
+                        <ColorPalette
+                            value={contentBackgroundColor}
+                            onChange={onContentBackgroundColorChange}
+                            label={__('Content Background Color')}
+                        />
+                        <ColorPalette
+                            value={contentTextColor}
+                            onChange={onContentTextColorChange}
+                            label={__('Content Text Color')}
+                        />
+                        <RangeControl
+                            value={contentTextSize}
+                            onChange={onContentTextSizeChange}
+                            label={__('Content Text Size')}
+                            min={10}
+                            max={30}
+                        />
+                        <SelectControl
+                            value={contentAlignment}
+                            onChange={onContentAlignmentChange}
+                            options={[
+                                { label: __('Left'), value: 'left' },
+                                { label: __('Center'), value: 'center' },
+                                { label: __('Right'), value: 'right' },
+                            ]}
+                            label={__('Content Alignment')}
                         />
                     </PanelBody>
                 </InspectorControls>
@@ -160,13 +206,19 @@ export default function Edit({ attributes, setAttributes }) {
                         <div
                             key={tab.id}
                             className={`easy-tabs-pane ${activeTab === tab.id ? 'active' : ''}`}
+                            style={{
+                                backgroundColor: contentBackgroundColor,
+                                color: contentTextColor,
+                                fontSize: `${contentTextSize}px`,
+                                textAlign: contentAlignment,
+                            }}
                         >
                             <RichText
                                 tagName="div"
                                 value={tab.content}
                                 onChange={(content) => handleContentChange(tab.id, content)}
-                                placeholder={__('Type your content here...', 'easy-tabs')} // Placeholder added here
-                                onFocus={() => setSelectedContent(tab.id)} // Set selected content
+                                placeholder={__('Type your content here...', 'easy-tabs')} 
+                                onFocus={() => setSelectedContent(tab.id)} 
                             />
                         </div>
                     ))}
